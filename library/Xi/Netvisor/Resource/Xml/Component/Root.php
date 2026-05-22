@@ -8,8 +8,6 @@ abstract class Root
 {
     public function __construct()
     {
-        // This is important for Doctrine annotation reader to work
-        AnnotationRegistry::registerLoader('class_exists');
     }
 
     /**
