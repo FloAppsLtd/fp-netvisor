@@ -2,8 +2,6 @@
 
 namespace Xi\Netvisor\Resource\Xml\Component;
 
-use Doctrine\Common\Annotations\AnnotationRegistry;
-
 abstract class Root
 {
     public function __construct()
