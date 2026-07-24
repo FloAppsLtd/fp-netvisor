@@ -5,6 +5,7 @@ namespace Xi\Netvisor\Component;
 use Xi\Netvisor\Component\Validate;
 use Xi\Netvisor\Resource\Xml\TestResource;
 use Xi\Netvisor\XmlTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class ValidateTest extends XmlTestCase
 {
@@ -20,9 +21,7 @@ class ValidateTest extends XmlTestCase
         $this->validate = new Validate();
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function validatesXmlAgainstDtd()
     {
         $resource = new TestResource();
@@ -33,9 +32,7 @@ class ValidateTest extends XmlTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function isNotValidIfXmlDoesNotSatisfyDtd()
     {
         $resource = new TestResource();

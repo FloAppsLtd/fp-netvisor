@@ -16,6 +16,7 @@ use Xi\Netvisor\Exception\NetvisorException;
 use Xi\Netvisor\Filter\SalesInvoicesFilter;
 use Xi\Netvisor\Resource\Xml\PurchaseInvoice;
 use Xi\Netvisor\Resource\Xml\PurchaseInvoiceState;
+use PHPUnit\Framework\Attributes\Test;
 
 class NetvisorTest extends TestCase
 {
@@ -34,9 +35,6 @@ class NetvisorTest extends TestCase
      */
     private $config;
 
-    /**
-     * @test
-     */
     public function setUp(): void
     {
         $this->client = $this->getMockBuilder('GuzzleHttp\Client')
@@ -58,17 +56,13 @@ class NetvisorTest extends TestCase
         $this->netvisor = new Netvisor($this->client, $this->config, new Validate());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function builds()
     {
         $this->assertInstanceOf('Xi\Netvisor\Netvisor', Netvisor::build($this->config));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function returnsNullIfNotEnabled()
     {
         $config = new Config(
@@ -90,9 +84,7 @@ class NetvisorTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throwsIfXmlIsNotValid()
     {
         $this->expectExceptionMessage('XML is not valid according to DTD');
@@ -100,9 +92,7 @@ class NetvisorTest extends TestCase
         $this->netvisor->requestWithBody(new TestResource(), 'service', array(), null);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function requestsIfDtdValidationPasses()
     {
         $resource = new TestResource();
@@ -111,18 +101,17 @@ class NetvisorTest extends TestCase
         $this->client->expects($this->once())
             ->method('request')
             ->with($this->anything())
-            ->will($this->returnValue(
+            ->willReturn(
                 new Response('200', array(), 'lus')
-            ));
+            );
 
         $this->assertEquals('lus', $this->netvisor->requestWithBody($resource, 'service', array(), null));
     }
 
     /**
      * TODO: Betterize test and/or Netvisor structure.
-     *
-     * @test
      */
+    #[Test]
     public function sendInvoiceSendsRequest()
     {
         $validate = $this->getMockBuilder('Xi\Netvisor\Component\Validate')
@@ -131,15 +120,15 @@ class NetvisorTest extends TestCase
 
         $validate->expects($this->once())
             ->method('isValid')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $netvisor = new Netvisor($this->client, $this->config, $validate);
 
         $this->client->expects($this->once())
             ->method('request')
-            ->will($this->returnValue(
+            ->willReturn(
                 new Response('200', array(), 'lus')
-            ));
+            );
 
         $invoice = $this->getMockBuilder('Xi\Netvisor\Resource\Xml\SalesInvoice')
             ->disableOriginalConstructor()
@@ -147,18 +136,16 @@ class NetvisorTest extends TestCase
 
         $invoice->expects($this->once())
             ->method('getDtdPath')
-            ->will($this->returnValue(__DIR__ . '/Resource/Dtd/test.dtd'));
+            ->willReturn(__DIR__ . '/Resource/Dtd/test.dtd');
 
         $invoice->expects($this->once())
             ->method('getSerializableObject')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
 
         $this->assertEquals('lus', $netvisor->sendInvoice($invoice));
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function processInvoiceToWorkWithNetvisor()
     {
         $xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<salesinvoicedate><![CDATA[2014-02-17]]</salesinvoicedate>";
@@ -185,7 +172,7 @@ class NetvisorTest extends TestCase
         $netvisorMock = $this
             ->getMockBuilder(Netvisor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['requestWithBody'])
+            ->onlyMethods(['requestWithBody'])
             ->getMock();
 
         $netvisorMock
@@ -215,7 +202,7 @@ class NetvisorTest extends TestCase
         $netvisorMock = $this
             ->getMockBuilder(Netvisor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['requestWithBody'])
+            ->onlyMethods(['requestWithBody'])
             ->getMock();
 
         $netvisorMock
@@ -237,7 +224,7 @@ class NetvisorTest extends TestCase
         $netvisorMock = $this
             ->getMockBuilder(Netvisor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['requestWithBody'])
+            ->onlyMethods(['requestWithBody'])
             ->getMock();
 
         $netvisorMock
@@ -256,7 +243,7 @@ class NetvisorTest extends TestCase
         $netvisorMock = $this
             ->getMockBuilder(Netvisor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMock();
 
         $netvisorMock
@@ -276,7 +263,7 @@ class NetvisorTest extends TestCase
         $netvisorMock = $this
             ->getMockBuilder(Netvisor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMock();
 
         $netvisorMock
@@ -296,7 +283,7 @@ class NetvisorTest extends TestCase
         $netvisorMock = $this
             ->getMockBuilder(Netvisor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMock();
 
         $netvisorMock
@@ -323,7 +310,7 @@ class NetvisorTest extends TestCase
         $netvisorMock = $this
             ->getMockBuilder(Netvisor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getVouchers'])
+            ->onlyMethods(['getVouchers'])
             ->getMock();
 
         $netvisorMock
@@ -366,7 +353,7 @@ class NetvisorTest extends TestCase
         $netvisorMock = $this
             ->getMockBuilder(Netvisor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['requestWithBody'])
+            ->onlyMethods(['requestWithBody'])
             ->getMock();
 
         $netvisorMock
@@ -388,7 +375,7 @@ class NetvisorTest extends TestCase
         $netvisorMock = $this
             ->getMockBuilder(Netvisor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['requestWithBody'])
+            ->onlyMethods(['requestWithBody'])
             ->getMock();
 
         $netvisorMock
@@ -412,7 +399,7 @@ class NetvisorTest extends TestCase
         $netvisorMock = $this
             ->getMockBuilder(Netvisor::class)
             ->disableOriginalConstructor()
-            ->setMethods(['get'])
+            ->onlyMethods(['get'])
             ->getMock();
 
         $netvisorMock

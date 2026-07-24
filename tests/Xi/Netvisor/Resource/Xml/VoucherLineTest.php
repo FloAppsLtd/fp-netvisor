@@ -4,6 +4,7 @@ namespace Xi\Netvisor\Resource\Xml;
 
 use Xi\Netvisor\Resource\Xml\VoucherLine;
 use Xi\Netvisor\XmlTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class VoucherLineTest extends XmlTestCase
 {
@@ -59,15 +60,13 @@ class VoucherLineTest extends XmlTestCase
         $xml = $this->toXml($this->voucherLine);
 
         $this->assertSame(2, substr_count($xml, '<dimensionname>'));
-        $this->assertContains($name, $xml);
-        $this->assertContains($item, $xml);
-        $this->assertContains($name2, $xml);
-        $this->assertContains($item, $xml);
+        $this->assertStringContainsString($name, $xml);
+        $this->assertStringContainsString($item, $xml);
+        $this->assertStringContainsString($name2, $xml);
+        $this->assertStringContainsString($item, $xml);
     }
 
-    /**
-     * @dataProvider lineSumTypeProvider
-     */
+    #[DataProvider('lineSumTypeProvider')]
     public function testSetLineSumType($type)
     {
         // Default
@@ -84,7 +83,7 @@ class VoucherLineTest extends XmlTestCase
         $this->assertXmlContainsTagWithAttributes('linesum', array('type' => $type), $xml);
     }
 
-    public function lineSumTypeProvider()
+    public static function lineSumTypeProvider()
     {
         return [
             [VoucherLine::UNIT_PRICE_TYPE_WITH_VAT],
@@ -92,9 +91,7 @@ class VoucherLineTest extends XmlTestCase
         ];
     }
 
-    /**
-     * @dataProvider setVatCodeProvider
-     */
+    #[DataProvider('setVatCodeProvider')]
     public function testSetVatCode($code)
     {
         // Default
@@ -116,7 +113,7 @@ class VoucherLineTest extends XmlTestCase
         );
     }
 
-    public function setVatCodeProvider()
+    public static function setVatCodeProvider()
     {
         return [
             [VoucherLine::VAT_CODE_KOMY],
@@ -140,6 +137,6 @@ class VoucherLineTest extends XmlTestCase
         $xml = $this->toXml($this->voucherLine);
 
         $this->assertXmlContainsTagWithValue('description', substr($description, 0, 255), $xml);
-        $this->assertNotContains($description, $xml);
+        $this->assertStringNotContainsString($description, $xml);
     }
 }

@@ -4,12 +4,11 @@ namespace Xi\Netvisor\Component;
 
 use PHPUnit\Framework\TestCase;
 use Xi\Netvisor\Config;
+use PHPUnit\Framework\Attributes\Test;
 
 class ConfigTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[Test]
     public function getsGivenParams()
     {
         $c = new Config(

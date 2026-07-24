@@ -4,6 +4,8 @@ namespace Xi\Netvisor\Resource\Xml;
 
 use Xi\Netvisor\Resource\Xml\SalesInvoiceProductLine;
 use Xi\Netvisor\XmlTestCase;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SalesInvoiceProductLineTest extends XmlTestCase
 {
@@ -26,9 +28,7 @@ class SalesInvoiceProductLineTest extends XmlTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function xmlHasRequiredProductLineValues()
     {
         $xml = $this->toXml($this->invoiceProductLine);
@@ -37,7 +37,7 @@ class SalesInvoiceProductLineTest extends XmlTestCase
         $this->assertXmlContainsTagWithAttributes('productidentifier', array('type' => 'netvisor'), $xml);
 
         $this->assertXmlContainsTagWithValue('productname', substr(static::LONG_PRODUCT_NAmE, 0, 200), $xml);
-        $this->assertNotContains(static::LONG_PRODUCT_NAmE, $xml);
+        $this->assertStringNotContainsString(static::LONG_PRODUCT_NAmE, $xml);
 
         $this->assertXmlContainsTagWithValue('productunitprice', '1,23', $xml);
         $this->assertXmlContainsTagWithAttributes('productunitprice', array('type' => 'net'), $xml);
@@ -48,9 +48,7 @@ class SalesInvoiceProductLineTest extends XmlTestCase
         $this->assertXmlContainsTagWithValue('salesinvoiceproductlinequantity', '5', $xml);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function xmlHasAddedDimensionLines()
     {
         $name = 'Test dimension name';
@@ -64,15 +62,13 @@ class SalesInvoiceProductLineTest extends XmlTestCase
         $xml = $this->toXml($this->invoiceProductLine);
 
         $this->assertSame(2, substr_count($xml, '<dimensionname>'));
-        $this->assertContains($name, $xml);
-        $this->assertContains($item, $xml);
-        $this->assertContains($name2, $xml);
-        $this->assertContains($item, $xml);
+        $this->assertStringContainsString($name, $xml);
+        $this->assertStringContainsString($item, $xml);
+        $this->assertStringContainsString($name2, $xml);
+        $this->assertStringContainsString($item, $xml);
     }
 
-    /**
-     * @dataProvider productIdentifierTypeProvider
-     */
+    #[DataProvider('productIdentifierTypeProvider')]
     public function testSetProductIdentifierType($type)
     {
         // Default
@@ -89,7 +85,7 @@ class SalesInvoiceProductLineTest extends XmlTestCase
         $this->assertXmlContainsTagWithAttributes('productidentifier', array('type' => $type), $xml);
     }
 
-    public function productIdentifierTypeProvider()
+    public static function productIdentifierTypeProvider()
     {
         return [
             [SalesInvoiceProductLine::PRODUCT_IDENTIFIER_TYPE_CUSTOMER],
@@ -97,9 +93,7 @@ class SalesInvoiceProductLineTest extends XmlTestCase
         ];
     }
 
-    /**
-     * @dataProvider unitPriceTypeProvider
-     */
+    #[DataProvider('unitPriceTypeProvider')]
     public function testSetUnitPriceType($type)
     {
         // Default
@@ -116,7 +110,7 @@ class SalesInvoiceProductLineTest extends XmlTestCase
         $this->assertXmlContainsTagWithAttributes('productunitprice', array('type' => $type), $xml);
     }
 
-    public function unitPriceTypeProvider()
+    public static function unitPriceTypeProvider()
     {
         return [
             [SalesInvoiceProductLine::UNIT_PRICE_TYPE_WITH_VAT],
@@ -144,9 +138,7 @@ class SalesInvoiceProductLineTest extends XmlTestCase
         $this->assertXmlContainsTagWithValue('accountingaccountsuggestion', $account, $xml);
     }
 
-    /**
-     * @dataProvider setVatCodeProvider
-     */
+    #[DataProvider('setVatCodeProvider')]
     public function testSetVatCode($code)
     {
         // Default
@@ -168,7 +160,7 @@ class SalesInvoiceProductLineTest extends XmlTestCase
         );
     }
 
-    public function setVatCodeProvider()
+    public static function setVatCodeProvider()
     {
         return [
             [SalesInvoiceProductLine::VAT_CODE_KOMY],

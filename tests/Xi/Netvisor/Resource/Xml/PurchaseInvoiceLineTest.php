@@ -4,6 +4,7 @@ namespace Xi\Netvisor\Resource\Xml;
 
 use Xi\Netvisor\Resource\Xml\PurchaseInvoiceLine;
 use Xi\Netvisor\XmlTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class PurchaseInvoiceLineTest extends XmlTestCase
 {
@@ -25,9 +26,7 @@ class PurchaseInvoiceLineTest extends XmlTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function xmlHasRequiredLineValues()
     {
         $name = 'Product name, which is longer than the limit of 200 characters Will add some lirum larum. Will add some lirum larum. Will add some lirum larum. Will add some lirum larum. Will add some lirum larum. Will add some lirum larum.';
@@ -47,20 +46,18 @@ class PurchaseInvoiceLineTest extends XmlTestCase
         );
 
         $this->assertXmlContainsTagWithValue('productname', substr($name, 0, 200), $xml);
-        $this->assertNotContains($name, $xml);
+        $this->assertStringNotContainsString($name, $xml);
 
         $this->assertXmlContainsTagWithValue('deliveredamount', $amount, $xml);
         $this->assertXmlContainsTagWithValue('unitprice', $unitPrice, $xml);
         $this->assertXmlContainsTagWithValue('vatpercent', $vatPercent, $xml);
         
         $this->assertXmlContainsTagWithValue('linesum', round($lineSum, 2), $xml);
-        $this->assertNotContains((string) $lineSum, $xml);
+        $this->assertStringNotContainsString((string) $lineSum, $xml);
         $this->assertXmlContainsTagWithAttributes('linesum', array('type' => 'brutto'), $xml);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function xmlHasAddedDimensionLines()
     {
         $name = 'Test dimension name';
@@ -74,10 +71,10 @@ class PurchaseInvoiceLineTest extends XmlTestCase
         $xml = $this->toXml($this->invoiceLine);
 
         $this->assertSame(2, substr_count($xml, '<dimensionname>'));
-        $this->assertContains($name, $xml);
-        $this->assertContains($item, $xml);
-        $this->assertContains($name2, $xml);
-        $this->assertContains($item, $xml);
+        $this->assertStringContainsString($name, $xml);
+        $this->assertStringContainsString($item, $xml);
+        $this->assertStringContainsString($name2, $xml);
+        $this->assertStringContainsString($item, $xml);
     }
 
     public function testSetAccountingAccount()

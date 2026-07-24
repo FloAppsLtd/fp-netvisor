@@ -23,9 +23,7 @@ class SalesInvoiceProductLine
     private $salesinvoiceproductlinefreetext;
     private $accountingaccountsuggestion;
 
-    /**
-     * @XmlList(inline = true, entry = "dimension")
-     */
+    #[XmlList(inline: true, entry: "dimension")]
     private $dimensions = [];
 
     /**

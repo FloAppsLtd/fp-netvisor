@@ -6,15 +6,11 @@ use JMS\Serializer\Annotation\XmlKeyValuePairs;
 use JMS\Serializer\Annotation\Inline;
 use JMS\Serializer\Annotation\XmlRoot;
 
-/**
- * @XmlRoot("root")
- */
+#[XmlRoot("root")]
 class WrapperElement
 {
-    /**
-     * @XmlKeyValuePairs
-     * @Inline
-     */
+    #[XmlKeyValuePairs]
+    #[Inline]
     private $value;
 
     /**

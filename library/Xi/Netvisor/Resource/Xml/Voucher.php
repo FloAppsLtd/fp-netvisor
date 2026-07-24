@@ -17,9 +17,7 @@ class Voucher extends Root
     private $description;
     private $voucherClass;
 
-    /**
-     * @XmlList(inline = true, entry = "voucherline")
-     */
+    #[XmlList(inline: true, entry: "voucherline")]
     private $voucherLines = array();
 
     /**
