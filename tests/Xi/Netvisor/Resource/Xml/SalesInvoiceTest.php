@@ -4,6 +4,7 @@ namespace Xi\Netvisor\Resource\Xml;
 
 use Xi\Netvisor\Resource\Xml\SalesInvoice;
 use Xi\Netvisor\XmlTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class SalesInvoiceTest extends XmlTestCase
 {
@@ -25,17 +26,13 @@ class SalesInvoiceTest extends XmlTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasDtd()
     {
         $this->assertNotNull($this->invoice->getDtdPath());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function xmlHasRequiredSalesInvoiceValues()
     {
         $xml = $this->toXml($this->invoice->getSerializableObject());
@@ -50,9 +47,7 @@ class SalesInvoiceTest extends XmlTestCase
         $this->assertXmlContainsTagWithAttributes('invoicingcustomeridentifier', array('type' => 'netvisor'), $xml);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function xmlHasAddedSalesInvoiceProductLines()
     {
         $this->invoice->addSalesInvoiceProductLine(new SalesInvoiceProductLine('1', 'A', '1,00', '24', '1'));
@@ -60,9 +55,9 @@ class SalesInvoiceTest extends XmlTestCase
 
         $xml = $this->toXml($this->invoice->getSerializableObject());
 
-        $this->assertContains('invoicelines', $xml);
-        $this->assertContains('invoiceline', $xml);
-        $this->assertContains('salesinvoiceproductline', $xml);
+        $this->assertStringContainsString('invoicelines', $xml);
+        $this->assertStringContainsString('invoiceline', $xml);
+        $this->assertStringContainsString('salesinvoiceproductline', $xml);
 
         $this->assertXmlContainsTagWithValue('productidentifier', '1', $xml);
         $this->assertXmlContainsTagWithValue('productidentifier', '2', $xml);
@@ -106,10 +101,10 @@ class SalesInvoiceTest extends XmlTestCase
         $xml = $this->toXml($this->invoice->getSerializableObject());
 
         $this->assertXmlContainsTagWithValue('deliveryaddressname', $receiverName, $xml);
-        $this->assertNotContains('deliveryaddressline', $xml);
-        $this->assertNotContains('deliveryaddresspostnumber', $xml);
-        $this->assertNotContains('deliveryaddresstown', $xml);
-        $this->assertNotContains('deliveryaddresscountrycode', $xml);
+        $this->assertStringNotContainsString('deliveryaddressline', $xml);
+        $this->assertStringNotContainsString('deliveryaddresspostnumber', $xml);
+        $this->assertStringNotContainsString('deliveryaddresstown', $xml);
+        $this->assertStringNotContainsString('deliveryaddresscountrycode', $xml);
     }
 
     public function testSetInvoiceNumber()
@@ -152,7 +147,7 @@ class SalesInvoiceTest extends XmlTestCase
         $xml = $this->toXml($this->invoice->getSerializableObject());
 
         $this->assertXmlContainsTagWithValue('salesinvoicefreetextbeforelines', substr($text, 0, 500), $xml);
-        $this->assertNotContains($text, $xml);
+        $this->assertStringNotContainsString($text, $xml);
     }
 
     public function testSetAfterLinesText()
@@ -172,7 +167,7 @@ class SalesInvoiceTest extends XmlTestCase
         $xml = $this->toXml($this->invoice->getSerializableObject());
 
         $this->assertXmlContainsTagWithValue('salesinvoicefreetextafterlines', substr($text, 0, 500), $xml);
-        $this->assertNotContains($text, $xml);
+        $this->assertStringNotContainsString($text, $xml);
     }
 
     public function testSetYourReference()

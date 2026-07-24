@@ -28,9 +28,7 @@ class SalesInvoice extends Root
     private $deliveryaddresscountrycode;
     private $paymentTermNetDays;
 
-    /**
-     * @XmlList(entry = "invoiceline")
-     */
+    #[XmlList(entry: "invoiceline")]
     private $invoiceLines = array();
 
     /**

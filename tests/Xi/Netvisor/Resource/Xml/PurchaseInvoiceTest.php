@@ -4,6 +4,8 @@ namespace Xi\Netvisor\Resource\Xml;
 
 use Xi\Netvisor\Resource\Xml\PurchaseInvoice;
 use Xi\Netvisor\XmlTestCase;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class PurchaseInvoiceTest extends XmlTestCase
 {
@@ -25,17 +27,13 @@ class PurchaseInvoiceTest extends XmlTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasDtd()
     {
         $this->assertNotNull($this->invoice->getDtdPath());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function xmlHasRequiredSalesInvoiceValues()
     {
         $invoiceNumber = 123;
@@ -66,12 +64,10 @@ class PurchaseInvoiceTest extends XmlTestCase
         $this->assertXmlContainsTagWithAttributes('duedate', array('format' => 'ansi'), $xml);
 
         $this->assertXmlContainsTagWithValue('amount', round($amount, 2), $xml);
-        $this->assertNotContains((string) $amount, $xml);
+        $this->assertStringNotContainsString((string) $amount, $xml);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function xmlHasAddedPurchaseInvoiceLines()
     {
         $this->invoice->addPurchaseInvoiceLine(
@@ -84,8 +80,8 @@ class PurchaseInvoiceTest extends XmlTestCase
 
         $xml = $this->toXml($this->invoice->getSerializableObject());
 
-        $this->assertContains('purchaseinvoicelines', $xml);
-        $this->assertContains('purchaseinvoiceline', $xml);
+        $this->assertStringContainsString('purchaseinvoicelines', $xml);
+        $this->assertStringContainsString('purchaseinvoiceline', $xml);
 
         $this->assertXmlContainsTagWithValue('productname', 'Name 1', $xml);
         $this->assertXmlContainsTagWithValue('productname', 'Name 2', $xml);
@@ -105,8 +101,8 @@ class PurchaseInvoiceTest extends XmlTestCase
 
         $xml = $this->toXml($this->invoice->getSerializableObject());
 
-        $this->assertContains('purchaseinvoiceattachments', $xml);
-        $this->assertContains('purchaseinvoiceattachment', $xml);
+        $this->assertStringContainsString('purchaseinvoiceattachments', $xml);
+        $this->assertStringContainsString('purchaseinvoiceattachment', $xml);
 
         $this->assertXmlContainsTagWithValue('attachmentdescription', 'Desc 1', $xml);
         $this->assertXmlContainsTagWithValue('attachmentdescription', 'Desc 2', $xml);
@@ -131,12 +127,10 @@ class PurchaseInvoiceTest extends XmlTestCase
         $xml = $this->toXml($this->invoice->getSerializableObject());
 
         $this->assertXmlContainsTagWithValue('comment', substr($comment, 0, 255), $xml);
-        $this->assertNotContains($comment, $xml);
+        $this->assertStringNotContainsString($comment, $xml);
     }
 
-    /**
-     * @dataProvider setVendorDetailsProvider
-     */
+    #[DataProvider('setVendorDetailsProvider')]
     public function testSetVendorDetails(
         $bankAccount,
         $businessId,
@@ -215,7 +209,7 @@ class PurchaseInvoiceTest extends XmlTestCase
         }
     }
 
-    public function setVendorDetailsProvider()
+    public static function setVendorDetailsProvider()
     {
         return [
             [
@@ -274,9 +268,7 @@ class PurchaseInvoiceTest extends XmlTestCase
         $this->assertXmlContainsTagWithValue('bankreferencenumber', $reference, $xml);
     }
 
-    /**
-     * @dataProvider setInvoiceSourceProvider
-     */
+    #[DataProvider('setInvoiceSourceProvider')]
     public function testSetInvoiceSource($source, $expectException)
     {
         if ($expectException) {
@@ -289,7 +281,7 @@ class PurchaseInvoiceTest extends XmlTestCase
         $this->assertXmlContainsTagWithValue('invoicesource', $source, $xml);
     }
 
-    public function setInvoiceSourceProvider()
+    public static function setInvoiceSourceProvider()
     {
         return [
             [PurchaseInvoice::INVOICE_SOURCE_FINVOICE, false],

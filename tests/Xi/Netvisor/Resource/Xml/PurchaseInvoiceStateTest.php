@@ -3,6 +3,7 @@
 namespace Xi\Netvisor\Resource\Xml;
 
 use Xi\Netvisor\XmlTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class PurchaseInvoiceStateTest extends XmlTestCase
 {
@@ -18,17 +19,13 @@ class PurchaseInvoiceStateTest extends XmlTestCase
         $this->invoiceState = new PurchaseInvoiceState(123, 'approved', false);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasDtd()
     {
         $this->assertNotNull($this->invoiceState->getDtdPath());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function xmlHasRequiredSalesInvoiceValues()
     {
         $netvisorId = 123;

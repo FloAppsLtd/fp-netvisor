@@ -3,6 +3,7 @@
 namespace Xi\Netvisor\Resource\Xml;
 
 use Xi\Netvisor\XmlTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class PurchaseInvoiceAttachmentTest extends XmlTestCase
 {
@@ -23,9 +24,7 @@ class PurchaseInvoiceAttachmentTest extends XmlTestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function xmlHasRequiredSalesInvoiceValues()
     {
         $description = 'description';

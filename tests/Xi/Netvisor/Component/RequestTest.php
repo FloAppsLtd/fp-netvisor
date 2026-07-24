@@ -8,6 +8,7 @@ use Xi\Netvisor\Config;
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 use Xi\Netvisor\Exception\NetvisorException;
+use PHPUnit\Framework\Attributes\Test;
 
 class RequestTest extends TestCase
 {
@@ -17,7 +18,7 @@ class RequestTest extends TestCase
     private $request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $client;
 
@@ -44,9 +45,7 @@ class RequestTest extends TestCase
         $this->request = new Request($this->client, $config);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createsRequest()
     {
         $this->client->expects($this->once())
@@ -56,9 +55,9 @@ class RequestTest extends TestCase
                 'http://integration.netvisor.fi/accounting.nv',
                 $this->anything()
             )
-            ->will($this->returnValue(
+            ->willReturn(
                 new Response('200', array(), 'hello')
-            ));
+            );
 
         $this->request->post(
             '<?xml>',
@@ -66,9 +65,7 @@ class RequestTest extends TestCase
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function throwsExceptionIfResponseStatusIsFailed()
     {
         $xmlResponse = <<<LUS
@@ -89,9 +86,9 @@ LUS;
                 'http://integration.netvisor.fi/accounting.nv',
                 $this->anything()
             )
-            ->will($this->returnValue(
+            ->willReturn(
                 new Response('200', array(), $xmlResponse)
-            ));
+            );
 
         $this->expectException(NetvisorException::class);
         $this->expectExceptionMessage('AUTHENTICATION_FAILED :: Integraatiokumppania ei löydy, katso dokumentaatio');
@@ -102,9 +99,7 @@ LUS;
         );
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function returnsResponseBodyIfResponseStatusIsOK()
     {
         $xmlResponse = <<<LUS
@@ -124,9 +119,9 @@ LUS;
                 'http://integration.netvisor.fi/accounting.nv',
                 $this->anything()
             )
-            ->will($this->returnValue(
+            ->willReturn(
                 new Response('200', array(), $xmlResponse)
-            ));
+            );
 
         $response = $this->request->post(
             '<?xml>',

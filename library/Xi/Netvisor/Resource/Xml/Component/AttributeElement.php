@@ -7,14 +7,10 @@ use JMS\Serializer\Annotation\Inline;
 
 class AttributeElement
 {
-    /**
-     * @Inline
-     */
+    #[Inline]
     private $value;
 
-    /**
-     * @XmlAttributeMap
-     */
+    #[XmlAttributeMap]
     private $attributes;
 
     /**

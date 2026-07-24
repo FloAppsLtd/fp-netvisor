@@ -14,9 +14,7 @@ class PurchaseInvoiceLine
     private $linesum;
     private $accountingsuggestion;
 
-    /**
-     * @XmlList(inline = true, entry = "dimension")
-     */
+    #[XmlList(inline: true, entry: "dimension")]
     private $dimensions = [];
 
     /**

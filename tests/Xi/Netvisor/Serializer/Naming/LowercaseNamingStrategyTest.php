@@ -5,13 +5,13 @@ namespace Xi\Netvisor\Component;
 use JMS\Serializer\Metadata\PropertyMetadata;
 use PHPUnit\Framework\TestCase;
 use Xi\Netvisor\Serializer\Naming\LowercaseNamingStrategy;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class LowercaseNamingStrategyTest extends TestCase
 {
-    /**
-     * @test
-     * @dataProvider provideNames
-     */
+    #[Test]
+    #[DataProvider('provideNames')]
     public function lowercases($name)
     {
         $strategy = new LowercaseNamingStrategy();
@@ -25,7 +25,7 @@ class LowercaseNamingStrategyTest extends TestCase
         $this->assertEquals(strtolower($name), $strategy->translateName($metadata));
     }
 
-    public function provideNames()
+    public static function provideNames()
     {
         return array(
             array('camelCase'),
