@@ -1,6 +1,6 @@
 # Xi Netvisor
 
-Netvisor API interface for PHP 5.3+.
+Netvisor API interface for PHP 8.3+.
 
 [![CI](https://github.com/xi-project/xi-netvisor/actions/workflows/ci.yml/badge.svg)](https://github.com/xi-project/xi-netvisor/actions/workflows/ci.yml)
 
