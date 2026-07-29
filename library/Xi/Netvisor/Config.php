@@ -1,75 +1,39 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Xi\Netvisor;
 
 class Config
 {
-    /**
-     * @var boolean
-     */
-    private $enabled;
+    private bool $enabled;
 
-    /**
-     * @var string
-     */
-    private $host;
+    private string $host;
 
-    /**
-     * @var string
-     */
-    private $sender;
+    private string $sender;
 
-    /**
-     * @var string
-     */
-    private $customerId;
+    private string $customerId;
 
-    /**
-     * @var string
-     */
-    private $partnerId;
+    private string $partnerId;
 
-    /**
-     * @var string
-     */
-    private $language;
+    private string $language;
 
-    /**
-     * @var string
-     */
-    private $organizationId;
+    private string $organizationId;
 
-    /**
-     * @var string
-     */
-    private $userKey;
+    private string $userKey;
 
-    /**
-     * @var string
-     */
-    private $partnerKey;
+    private string $partnerKey;
 
-    /**
-     * @param boolean $enabled
-     * @param string  $host
-     * @param string  $sender
-     * @param string  $customerId
-     * @param string  $partnerId
-     * @param string  $language
-     * @param string  $organizationId
-     * @param string  $userKey
-     * @param string  $partnerKey
-     */
     public function __construct(
-        $enabled,
-        $host,
-        $sender,
-        $customerId,
-        $partnerId,
-        $language,
-        $organizationId,
-        $userKey,
-        $partnerKey
+        bool $enabled,
+        string $host,
+        string $sender,
+        string $customerId,
+        string $partnerId,
+        string $language,
+        string $organizationId,
+        string $userKey,
+        string $partnerKey
     ) {
         $this->enabled = $enabled;
         $this->host = $host;
@@ -82,83 +46,55 @@ class Config
         $this->partnerKey = $partnerKey;
     }
 
-    /**
-     * @return boolean
-     */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return $this->enabled;
     }
 
-    /**
-     * @return string
-     */
-    public function getCustomerId()
+    public function getCustomerId(): string
     {
         return $this->customerId;
     }
 
-    /**
-     * @return string
-     */
-    public function getHost()
+    public function getHost(): string
     {
         return $this->host;
     }
 
-    /**
-     * @return string
-     */
-    public function getLanguage()
+    public function getLanguage(): string
     {
         return $this->language;
     }
 
-    /**
-     * @param string $language
-     */
-    public function setLanguage($language)
+    public function setLanguage(string $language): void
     {
         $this->language = $language;
     }
 
-    /**
-     * @return string
-     */
-    public function getOrganizationId()
+    public function getOrganizationId(): string
     {
         return $this->organizationId;
     }
 
-    /**
-     * @return string
-     */
-    public function getPartnerId()
+    public function getPartnerId(): string
     {
         return $this->partnerId;
     }
 
-    /**
-     * @return string
-     */
-    public function getPartnerKey()
+    public function getPartnerKey(): string
     {
         return $this->partnerKey;
     }
 
-    /**
-     * @return string
-     */
-    public function getSender()
+    public function getSender(): string
     {
         return $this->sender;
     }
 
-    /**
-     * @return string
-     */
-    public function getUserKey()
+    public function getUserKey(): string
     {
         return $this->userKey;
     }
 }
+
+

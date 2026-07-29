@@ -1,166 +1,70 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Xi\Netvisor\Resource\Xml;
 
+use DateTime;
 use JMS\Serializer\Annotation\XmlList;
 use Xi\Netvisor\Resource\Xml\Component\Root;
 use Xi\Netvisor\Resource\Xml\Component\AttributeElement;
 use Xi\Netvisor\Resource\Xml\Component\WrapperElement;
 
-/**
- * TODO: Should be kept immutable?
- */
 class SalesInvoice extends Root
 {
-    private $salesinvoicenumber;
-    private $salesInvoiceDate;
-    private $salesinvoicereferencenumber;
-    private $salesInvoiceAmount;
-    private $salesInvoiceStatus;
-    private $salesinvoicefreetextbeforelines;
-    private $salesinvoicefreetextafterlines;
-    private $salesinvoiceyourreference;
-    private $invoicingCustomerIdentifier;
-    private $deliveryaddressname;
-    private $deliveryaddressline;
-    private $deliveryaddresspostnumber;
-    private $deliveryaddresstown;
-    private $deliveryaddresscountrycode;
-    private $paymentTermNetDays;
+    // properties order matters
+    private ?string $salesInvoiceNumber;
+    private string $salesInvoiceDate;
+    private string $salesInvoiceReferenceNumber;
+    private string $salesInvoiceAmount;
+    private AttributeElement $salesInvoiceStatus;
+    private string $salesInvoiceFreeTextAfterLines;
+    private AttributeElement $invoicingCustomerIdentifier;
+    private string $paymentTermNetDays;
+    private ?AttributeElement $secondName;
 
     #[XmlList(entry: "invoiceline")]
-    private $invoiceLines = array();
+    private $invoiceLines = [];
 
-    /**
-     * @param \DateTime $salesInvoiceDate
-     * @param string    $salesInvoiceAmount
-     * @param string    $salesInvoiceStatus
-     * @param string    $invoicingCustomerIdentifier
-     * @param int       $paymentTermNetDays
-     */
     public function __construct(
-        \DateTime $salesInvoiceDate,
-        $salesInvoiceAmount,
-        $salesInvoiceStatus,
-        $invoicingCustomerIdentifier,
-        $paymentTermNetDays
+        ?string $salesInvoiceNumber,
+        DateTime $salesInvoiceDate,
+        string $salesInvoiceReferenceNumber,
+        string $salesInvoiceAmount,
+        string $salesInvoiceStatus,
+        string $salesInvoiceFreeTextAfterLines,
+        string $invoicingCustomerIdentifier,
+        string $paymentTermNetDays,
+        ?string $secondName,
     ) {
         parent::__construct();
-
+        $this->salesInvoiceNumber = $salesInvoiceNumber;
         $this->salesInvoiceDate = $salesInvoiceDate->format('Y-m-d');
+        $this->salesInvoiceReferenceNumber = $salesInvoiceReferenceNumber;
         $this->salesInvoiceAmount = $salesInvoiceAmount;
-        $this->salesInvoiceStatus = new AttributeElement($salesInvoiceStatus, array('type' => 'netvisor'));
-        $this->invoicingCustomerIdentifier = new AttributeElement($invoicingCustomerIdentifier, array('type' => 'netvisor')); // TODO: Type can be netvisor/customer.
+        $this->salesInvoiceStatus = new AttributeElement($salesInvoiceStatus, ['type' => 'netvisor']);
+        $this->salesInvoiceFreeTextAfterLines = $salesInvoiceFreeTextAfterLines;
+        $this->invoicingCustomerIdentifier = new AttributeElement($invoicingCustomerIdentifier, ['type' => 'netvisor']);
         $this->paymentTermNetDays = $paymentTermNetDays;
+        if ($secondName) {
+            $this->secondName = new AttributeElement($secondName, ['type' => 'customer']);
+        }
     }
 
     /**
      * @param SalesInvoiceProductLine $line
-     * @return self
      */
-    public function addSalesInvoiceProductLine(SalesInvoiceProductLine $line)
+    public function addSalesInvoiceProductLine(SalesInvoiceProductLine $line): void
     {
         $this->invoiceLines[] = new WrapperElement('salesinvoiceproductline', $line);
-        return $this;
     }
 
-    /**
-     * @param string $receiverName
-     * @param string $streetAddress
-     * @param string $postNumber
-     * @param string $town
-     * @param string $countryCode
-     * @return self
-     */
-    public function setDeliveryReceiverDetails(
-        $receiverName,
-        $streetAddress,
-        $postNumber,
-        $town,
-        $countryCode
-    ) {
-        $map = [
-            'deliveryaddressname' => $receiverName,
-            'deliveryaddressline' => $streetAddress,
-            'deliveryaddresspostnumber' => $postNumber,
-            'deliveryaddresstown' => $town,
-            'deliveryaddresscountrycode' => $countryCode,
-        ];
-
-        foreach ($map as $xmlField => $value) {
-            if (!$value) {
-                $this->$xmlField = null;
-                continue;
-            }
-
-            $attributes = array();
-
-            if ($xmlField === 'deliveryaddresscountrycode') {
-                $attributes = array('type' => 'ISO-3316');
-            }
-
-            $this->$xmlField = new AttributeElement($value, $attributes);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param string $invoiceNumber
-     * @return self
-     */
-    public function setInvoiceNumber($invoiceNumber)
-    {
-        $this->salesinvoicenumber = $invoiceNumber;
-        return $this;
-    }
-
-    /**
-     * @param string $referenceNumber
-     * @return self
-     */
-    public function setReferenceNumber($referenceNumber)
-    {
-        $this->salesinvoicereferencenumber = $referenceNumber;
-        return $this;
-    }
-
-    /**
-     * @param string $text
-     * @return self
-     */
-    public function setAfterLinesText($text)
-    {
-        $this->salesinvoicefreetextafterlines = substr($text, 0, 500);
-        return $this;
-    }
-
-    /**
-     * @param string $text
-     * @return self
-     */
-    public function setBeforeLinesText($text)
-    {
-        $this->salesinvoicefreetextbeforelines = substr($text, 0, 500);
-        return $this;
-    }
-
-    /**
-     * @param string $text
-     * @return self
-     */
-    public function setYourReference($text)
-    {
-        $this->salesinvoiceyourreference = $text;
-        return $this;
-    }
-
-    public function getDtdPath()
+    public function getDtdPath(): string
     {
         return $this->getDtdFile('salesinvoice.dtd');
     }
 
-    protected function getXmlName()
+    protected function getXmlName(): string
     {
         return 'salesinvoice';
     }

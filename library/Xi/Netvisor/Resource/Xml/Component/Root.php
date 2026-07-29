@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Xi\Netvisor\Resource\Xml\Component;
 
 abstract class Root
@@ -11,34 +13,25 @@ abstract class Root
     /**
      * File path to a DTD file
      * which should be used for XML validation.
-     *
-     * @return string
      */
-    abstract public function getDtdPath();
+    abstract public function getDtdPath(): string;
 
     /**
      * TODO: Could this be called implicitly?
      *
      * Because Netvisor wants XML to be wrapped inside a root tag.
-     *
-     * @return WrapperElement
      */
-    public function getSerializableObject()
+    public function getSerializableObject(): WrapperElement|array
     {
         return new WrapperElement($this->getXmlName(), $this);
     }
 
     /**
      * Name of the first child element of the root, e.g. salesInvoice.
-     *
-     * @return string
      */
-    abstract protected function getXmlName();
+    abstract protected function getXmlName(): string;
 
-    /**
-     * @return string
-     */
-    protected function getDtdFile($filename)
+    protected function getDtdFile(string $filename): string
     {
         return __DIR__ . '/../../Dtd/' . $filename;
     }

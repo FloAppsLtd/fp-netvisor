@@ -6,12 +6,9 @@ use Xi\Netvisor\Resource\Xml\Component\Root;
 
 class TestResource extends Root
 {
-    protected $value;
+    protected ?string $value = null;
 
-    /**
-     * @param string $value
-     */
-    public function setValue($value)
+    public function setValue(string $value): void
     {
         $this->value = $value;
     }
@@ -19,12 +16,12 @@ class TestResource extends Root
     /**
      * @inheritdoc
      */
-    public function getDtdPath()
+    public function getDtdPath(): string
     {
         return __DIR__ . '/../Dtd/test.dtd';
     }
 
-    protected function getXmlName()
+    protected function getXmlName(): string
     {
         return 'test';
     }

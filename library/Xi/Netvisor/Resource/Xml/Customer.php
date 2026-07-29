@@ -1,16 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Xi\Netvisor\Resource\Xml;
 
-use JMS\Serializer\Annotation\XmlList;
 use Xi\Netvisor\Resource\Xml\Component\Root;
-use Xi\Netvisor\Resource\Xml\Component\AttributeElement;
-use Xi\Netvisor\Resource\Xml\Component\WrapperElement;
 
 class Customer extends Root
 {
-    private $customerBaseInformation;
-    private $customerFinvoiceDetails;
+    private CustomerBaseInformation $customerBaseInformation;
+    private ?CustomerFinvoiceDetails $customerFinvoiceDetails;
 
     public function __construct(
         CustomerBaseInformation $customerBaseInformation,
@@ -22,12 +21,12 @@ class Customer extends Root
         $this->customerFinvoiceDetails = $customerFinvoiceDetails;
     }
 
-    public function getDtdPath()
+    public function getDtdPath(): string
     {
         return $this->getDtdFile('customer.dtd');
     }
 
-    protected function getXmlName()
+    protected function getXmlName(): string
     {
         return 'customer';
     }

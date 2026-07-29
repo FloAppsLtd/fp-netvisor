@@ -37,5 +37,8 @@ jobs:
       - name: Run tests
         run: vendor/bin/phpunit -c tests --coverage-text
 
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --memory-limit=1G
+
 
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Xi\Netvisor\Resource\Xml;
 
 use Xi\Netvisor\XmlTestCase;
@@ -17,7 +19,6 @@ class PurchaseInvoiceAttachmentTest extends XmlTestCase
         parent::setUp();
 
         $this->attachment = new PurchaseInvoiceAttachment(
-            'application/pdf',
             'PDF',
             'filename.pdf',
             'data'

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Xi\Netvisor\Resource\Xml\Component;
 
 use JMS\Serializer\Annotation\XmlKeyValuePairs;
@@ -11,14 +13,13 @@ class WrapperElement
 {
     #[XmlKeyValuePairs]
     #[Inline]
-    private $value;
+    private array $value;
 
     /**
-     * @param string $elementName
-     * @param mixed  $value
+     * @param mixed $value
      */
-    public function __construct($elementName, $value)
+    public function __construct(string $elementName, mixed $value)
     {
-        $this->value = array($elementName => $value);
+        $this->value = [$elementName => $value];
     }
 }

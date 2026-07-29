@@ -1,6 +1,6 @@
 <!DOCTYPE root [
 <!ELEMENT root (salesinvoice)>
-<!ELEMENT salesinvoice (salesinvoicenumber?, salesinvoicedate, salesinvoicedeliverydate?, salesinvoicereferencenumber?, salesinvoiceamount, selleridentifier?, sellername?, invoicetype?, salesinvoicestatus, salesinvoicefreetextbeforelines?, salesinvoicefreetextafterlines?, salesinvoiceourreference?, salesinvoiceyourreference?, salesinvoiceprivatecomment?, invoicingcustomeridentifier, invoicingcustomername?, invoicingcustomernameextension?, invoicingcustomeraddressline?, invoicingcustomeradditionaladdressline?, invoicingcustomerpostnumber?, invoicingcustomertown?, invoicingcustomercountrycode?, deliveryaddressname?, deliveryaddressnameextension?, deliveryaddressline?, deliveryaddresspostnumber?, deliveryaddresstown?, deliveryaddresscountrycode?, deliverymethod?, deliveryterm?, salesinvoicetaxhandlingtype?, paymenttermnetdays, paymenttermcashdiscountdays?, paymenttermcashdiscount?, expectpartialpayments?, trydirectdebitlink?, overridevouchersalesreceivablesaccountnumber?, invoicesubjecttype?, printchannelformat?, invoicelines, invoicevoucherlines?, salesinvoiceaccrual?, salesinvoiceattachments?, customtags?)>
+<!ELEMENT salesinvoice (salesinvoicenumber?, salesinvoicedate, salesinvoicedeliverydate?, salesinvoicereferencenumber?, salesinvoiceamount, selleridentifier?, sellername?, invoicetype?, salesinvoicestatus, salesinvoicefreetextbeforelines?, salesinvoicefreetextafterlines?, salesinvoiceourreference?, salesinvoiceyourreference?, salesinvoiceprivatecomment?, invoicingcustomeridentifier, invoicingcustomername?, invoicingcustomernameextension?, invoicingcustomeraddressline?, invoicingcustomeradditionaladdressline?, invoicingcustomerpostnumber?, invoicingcustomertown?, invoicingcustomercountrycode?, deliveryaddressname?, deliveryaddressnameextension?, deliveryaddressline?, deliveryaddresspostnumber?, deliveryaddresstown?, deliveryaddresscountrycode?, deliverymethod?, deliveryterm?, salesinvoicetaxhandlingtype?, paymenttermnetdays, paymenttermcashdiscountdays?, paymenttermcashdiscount?, expectpartialpayments?, trydirectdebitlink?, overridevouchersalesreceivablesaccountnumber?, secondname?, invoicesubjecttype?, printchannelformat?, invoicelines, invoicevoucherlines?, salesinvoiceaccrual?, salesinvoiceattachments?, customtags?)>
 <!ELEMENT invoicelines (invoiceline+)>
 <!ELEMENT invoiceline (salesinvoiceproductline|salesinvoicecommentline)>
 <!ELEMENT salesinvoiceproductline (productidentifier, productname, productunitprice, productunitpurchaseprice?, productvatpercentage, salesinvoiceproductlinequantity, salesinvoiceproductlinediscountpercentage?, salesinvoiceproductlinefreetext?, salesinvoiceproductlinevatsum?, salesinvoiceproductlinesum?, accountingaccountsuggestion?, skipaccrual?, dimension*)>
@@ -48,7 +48,9 @@
 <!ELEMENT expectpartialpayments (#PCDATA)>
 <!ELEMENT trydirectdebitlink (#PCDATA)>		
     <!ATTLIST trydirectdebitlink mode (ignore_error|fail_on_error) #REQUIRED>	
-<!ELEMENT overridevouchersalesreceivablesaccountnumber (#PCDATA)>		
+<!ELEMENT overridevouchersalesreceivablesaccountnumber (#PCDATA)>
+<!ELEMENT secondname (#PCDATA)>
+    <!ATTLIST secondname type (netvisor|customer) #REQUIRED>
 <!ELEMENT invoicesubjecttype (#PCDATA)>
 <!ELEMENT salesinvoicetaxhandlingtype (#PCDATA)>
 <!ELEMENT printchannelformat (#PCDATA)>

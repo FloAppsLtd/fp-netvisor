@@ -1,0 +1,17 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    working_dir: /app
+
+  test:
+    extends: app
+    command: ["vendor/bin/phpunit", "-c", "tests", "--coverage-text"]
+
+  phpstan:
+    extends: app
+    command: ["vendor/bin/phpstan", "analyse", "--memory-limit=1G"]
+

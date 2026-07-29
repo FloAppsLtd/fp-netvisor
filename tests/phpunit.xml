@@ -5,4 +5,9 @@
             <directory>./Xi</directory>
         </testsuite>
     </testsuites>
+    <source>
+        <include>
+            <directory>../library</directory>
+        </include>
+    </source>
 </phpunit>

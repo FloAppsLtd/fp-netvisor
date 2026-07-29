@@ -1,19 +1,15 @@
 <?php
 
-namespace Xi\Netvisor\Resource\Xml;
+declare(strict_types=1);
 
-use Xi\Netvisor\Resource\Xml\Component\AttributeElement;
+namespace Xi\Netvisor\Resource\Xml;
 
 class Dimension
 {
-    private $dimensionname;
-    private $dimensionitem;
+    private string $dimensionname;
+    private string $dimensionitem;
 
-    /**
-     * @param string $dimensionname
-     * @param string $dimensionitem
-     */
-    public function __construct($dimensionname, $dimensionitem)
+    public function __construct(string $dimensionname, string $dimensionitem)
     {
         $this->dimensionname = $dimensionname;
         $this->dimensionitem = $dimensionitem;

@@ -1,32 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Xi\Netvisor\Resource\Xml;
 
 class CustomerBaseInformation
 {
-    private $externalIdentifier;
-    private $name;
-    private $streetAddress;
-    private $city;
-    private $postNumber;
-    private $country;
-    private $phonenumber;
-    private $email;
-    private $isprivatecustomer = 1;
+    private ?string $externalIdentifier = null;
+    private string $name;
+    private string $streetAddress;
+    private string $city;
+    private string $postNumber;
+    private string $country;
+    private ?string $phonenumber = null;
+    private ?string $email = null;
+    private int $isprivatecustomer = 1;
 
-    /**
-     * @param string $name
-     * @param string $streetAddress
-     * @param string $city
-     * @param string $postNumber
-     * @param string $country
-     */
     public function __construct(
-        $name,
-        $streetAddress,
-        $city,
-        $postNumber,
-        $country
+        string $name,
+        string $streetAddress,
+        string $city,
+        string $postNumber,
+        string $country
     ) {
         $this->name = $name;
         $this->streetAddress = $streetAddress;
@@ -35,31 +30,19 @@ class CustomerBaseInformation
         $this->country = $country;
     }
 
-    /**
-     * @param string $number
-     * @return self
-     */
-    public function setPhoneNumber($number)
+    public function setPhoneNumber(string $number): self
     {
         $this->phonenumber = $number;
         return $this;
     }
 
-    /**
-     * @param string $email
-     * @return self
-     */
-    public function setEmail($email)
+    public function setEmail(string $email): self
     {
         $this->email = $email;
         return $this;
     }
 
-    /**
-     * @param string $od
-     * @return self
-     */
-    public function setBusinessId($id)
+    public function setBusinessId(?string $id): self
     {
         $this->externalIdentifier = null;
         $this->isprivatecustomer = 1;

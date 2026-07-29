@@ -10,15 +10,9 @@ use PHPUnit\Framework\TestCase;
 
 class XmlTestCase extends TestCase
 {
-    /**
-     * @var Serializer
-     */
-    private $serializer;
+    private Serializer $serializer;
 
-    /**
-     * @var Validate
-     */
-    private $validate;
+    private Validate $validate;
 
     public function setUp(): void
     {
@@ -29,21 +23,12 @@ class XmlTestCase extends TestCase
         $this->validate = new Validate();
     }
 
-    /**
-     * @param  Object $object
-     * @return string
-     */
-    public function toXml($object)
+    public function toXml(object $object): string
     {
         return $this->serializer->serialize($object, 'xml');
     }
 
-    /**
-     * @param string $tag
-     * @param string $value
-     * @param string $xml
-     */
-    public function assertXmlContainsTagWithValue($tag, $value, $xml)
+    public function assertXmlContainsTagWithValue(string $tag, mixed $value, string $xml): void
     {
         $this->assertStringContainsString(sprintf('<%s', $tag), $xml);
 
@@ -55,21 +40,12 @@ class XmlTestCase extends TestCase
         $this->assertStringContainsString(sprintf('><![CDATA[%s]]></%s>', $value, $tag), $xml);
     }
 
-    /**
-     * @param string $tag
-     * @param string $xml
-     */
-    public function assertXmlDoesNotContainTag($tag, $xml)
+    public function assertXmlDoesNotContainTag(string $tag, string $xml): void
     {
         $this->assertStringNotContainsString(sprintf('<%s', $tag), $xml);
     }
 
-    /**
-     * @param string $tag
-     * @param string $value
-     * @param string $xml
-     */
-    public function assertXmlContainsTagWithAttributes($tag, $attributes, $xml)
+    public function assertXmlContainsTagWithAttributes(string $tag, array $attributes, string $xml): void
     {
         $attributeLine = '';
 
@@ -80,7 +56,7 @@ class XmlTestCase extends TestCase
         $this->assertStringContainsString(sprintf('<%s%s>', $tag, $attributeLine), $xml);
     }
 
-    public function assertXmlIsValid($xml, $dtdPath)
+    public function assertXmlIsValid(string $xml, string $dtdPath): void
     {
         $this->assertTrue($this->validate->isValid($xml, $dtdPath));
     }

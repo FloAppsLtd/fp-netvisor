@@ -1,35 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Xi\Netvisor\Component;
 
+use DateTime;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use Xi\Netvisor\Exception\NetvisorException;
 use Xi\Netvisor\Config;
 
 class Request
 {
-    /**
-     * @var Client
-     */
-    private $client;
+    private Client $client;
 
-    /**
-     * @var Config
-     */
-    private $config;
+    private Config $config;
 
-    /**
-     * @param Client $client
-     * @param Config $config
-     */
     public function __construct(Client $client, Config $config)
     {
         $this->client = $client;
         $this->config = $config;
     }
 
-    public function get($service, array $params = [])
+    /**
+     * @throws GuzzleException
+     * @throws NetvisorException
+     */
+    public function get(string $service, array $params = []): string
     {
         $url = $this->createUrl($service, $params);
         $headers = $this->createHeaders($url);
@@ -52,14 +50,9 @@ class Request
     /**
      * Makes a request to Netvisor and returns a response.
      *
-     * @param  string $xml
-     * @param  string $service
-     * @param  array $params
-     * @return string
-     *
      * @throws NetvisorException
      */
-    public function post($xml, $service, array $params = [])
+    public function post(string $xml, string $service, array $params = []): string
     {
         $url     = $this->createUrl($service, $params);
         $headers = $this->createHeaders($url);
@@ -80,12 +73,7 @@ class Request
         return (string)$response->getBody();
     }
 
-    /**
-     * @param  string  $service
-     * @param  array   $params
-     * @return string
-     */
-    private function createUrl($service, array $params = [])
+    private function createUrl(string $service, array $params = []): string
     {
         $url = "{$this->config->getHost()}/{$service}.nv";
 
@@ -99,11 +87,7 @@ class Request
         return $url;
     }
 
-    /**
-     * @param  string $url
-     * @return array
-     */
-    private function createHeaders($url)
+    private function createHeaders(string $url): array
     {
         $authenticationTransactionId = $this->getAuthenticationTransactionId();
         $authenticationTimestamp     = $this->getAuthenticationTimestamp();
@@ -120,26 +104,17 @@ class Request
         );
     }
 
-    /**
-     * @param  Response $response
-     * @return boolean
-     */
-    private function hasRequestFailed($response)
+    private function hasRequestFailed(Response $response): bool
     {
-        return strstr((string)$response->getBody(), '<Status>FAILED</Status>') != false;
+        return str_contains((string)$response->getBody(), '<Status>FAILED</Status>');
     }
 
     /**
      * Calculates MAC MD5-hash for headers.
-     *
-     * @param  string $url
-     * @param  string $authenticationTimestamp
-     * @param  string $authenticationTransactionId
-     * @return string
      */
-    private function getAuthenticationMac($url, $authenticationTimestamp, $authenticationTransactionId)
+    private function getAuthenticationMac(string $url, string $authenticationTimestamp, string $authenticationTransactionId): string
     {
-        $parameters = array(
+        $parameters = [
             $url,
             $this->config->getSender(),
             $this->config->getCustomerId(),
@@ -149,29 +124,25 @@ class Request
             $authenticationTransactionId,
             $this->config->getUserKey(),
             $this->config->getPartnerKey(),
-        );
+        ];
 
         return md5(implode('&', $parameters));
     }
 
     /**
      * Generates unique transaction ID.
-     *
-     * @return string
      */
-    private function getAuthenticationTransactionId()
+    private function getAuthenticationTransactionId(): string
     {
         return rand(1000, 9999) . microtime();
     }
 
     /**
      * Returns the current timestamp with 3-digit micro time.
-     *
-     * @return string
      */
-    private function getAuthenticationTimestamp()
+    private function getAuthenticationTimestamp(): string
     {
-        $timestamp = \DateTime::createFromFormat('U.u', microtime(true));
+        $timestamp = DateTime::createFromFormat('U.u', (string) microtime(true));
         $timestamp->setTimezone(new \DateTimeZone('GMT'));
 
         return substr($timestamp->format('Y-m-d H:i:s.u'), 0, -3);

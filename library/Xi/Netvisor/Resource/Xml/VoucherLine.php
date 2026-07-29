@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Xi\Netvisor\Resource\Xml;
 
 use JMS\Serializer\Annotation\XmlList;
@@ -7,62 +9,45 @@ use Xi\Netvisor\Resource\Xml\Component\AttributeElement;
 
 class VoucherLine
 {
-    public const UNIT_PRICE_TYPE_WITH_VAT = 'gross';
-    public const UNIT_PRICE_TYPE_WITHOUT_VAT = 'net';
-    public const VAT_CODE_KOMY = 'KOMY';
-    public const VAT_CODE_NONE = 'NONE';
+    public const string UNIT_PRICE_TYPE_WITH_VAT = 'gross';
+    public const string UNIT_PRICE_TYPE_WITHOUT_VAT = 'net';
+    public const string VAT_CODE_KOMY = 'KOMY';
+    public const string VAT_CODE_NONE = 'NONE';
 
-    private $lineSum;
-    private $description;
-    private $accountNumber;
-    private $vatPercent;
+    private AttributeElement $lineSum;
+    private ?string $description = null;
+    private int $accountNumber;
+    private AttributeElement $vatPercent;
 
     #[XmlList(inline: true, entry: "dimension")]
-    private $dimensions = [];
+    private array $dimensions = [];
 
-    public function __construct($lineSum, $accountNumber, $vatPercent)
+    public function __construct(int $lineSum, int $accountNumber, int $vatPercent)
     {
-        $this->lineSum = new AttributeElement($lineSum, array('type' => self::UNIT_PRICE_TYPE_WITHOUT_VAT));
+        $this->lineSum = new AttributeElement($lineSum, ['type' => self::UNIT_PRICE_TYPE_WITHOUT_VAT]);
         $this->accountNumber = $accountNumber;
-        $this->vatPercent = new AttributeElement($vatPercent, array('vatcode' => static::VAT_CODE_KOMY));
+        $this->vatPercent = new AttributeElement($vatPercent, ['vatcode' => static::VAT_CODE_KOMY]);
     }
 
-    /**
-     * @param string $name
-     * @param string $item
-     * @return self
-     */
-    public function addDimension($name, $item)
+    public function addDimension(string $name, string $item): self
     {
         $this->dimensions[] = new Dimension($name, $item);
         return $this;
     }
 
-    /**
-     * @param string $type
-     * @return self
-     */
-    public function setLineSumType($type)
+    public function setLineSumType(string $type): self
     {
         $this->lineSum->setAttribute('type', $type);
         return $this;
     }
 
-    /**
-     * @param string $code
-     * @return self
-     */
-    public function setVatCode($code)
+    public function setVatCode(string $code): self
     {
         $this->vatPercent->setAttribute('vatcode', $code);
         return $this;
     }
 
-    /**
-     * @param string $description
-     * @return self
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = substr($description, 0, 255);
         return $this;

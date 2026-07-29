@@ -1,30 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Xi\Netvisor\Filter;
+
+use DateTime;
 
 class SalesInvoicesFilter
 {
-    /**
-     * @var \DateTime
-     */
-    private $lastmodifiedstart;
+    private ?string $lastmodifiedstart = null;
 
-    /**
-     * @var int
-     */
-    private $invoicesabovenetvisorkey;
+    private ?int $invoicesabovenetvisorkey = null;
 
-    public function getFilterArray()
+    public function getFilterArray(): array
     {
         return array_filter(get_object_vars($this));
     }
 
-    public function setModifiedAfterDate(\DateTime $date)
+    public function setModifiedAfterDate(DateTime $date): void
     {
         $this->lastmodifiedstart = $date->format('Y-m-d');
     }
 
-    public function setGreaterThanId(int $id)
+    public function setGreaterThanId(int $id): void
     {
         $this->invoicesabovenetvisorkey = $id;
     }

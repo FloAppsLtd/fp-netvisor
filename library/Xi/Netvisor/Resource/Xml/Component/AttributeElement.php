@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Xi\Netvisor\Resource\Xml\Component;
 
 use JMS\Serializer\Annotation\XmlAttributeMap;
@@ -8,43 +10,28 @@ use JMS\Serializer\Annotation\Inline;
 class AttributeElement
 {
     #[Inline]
-    private $value;
+    private mixed $value;
 
     #[XmlAttributeMap]
-    private $attributes;
+    private array $attributes;
 
-    /**
-     * @param string $value
-     * @param array  $attributes
-     */
-    public function __construct($value, $attributes)
+    public function __construct(mixed $value, array $attributes)
     {
         $this->value = $value;
         $this->attributes = $attributes;
     }
 
-    /**
-     * @return string
-     */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->value;
     }
 
-    /**
-     * @return array
-     */
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
 
-    /**
-     * @param string $attribute
-     * @param array  $value
-     * @return self
-     */
-    public function setAttribute($attribute, $value)
+    public function setAttribute(string $attribute, mixed $value): self
     {
         $this->attributes[$attribute] = $value;
         return $this;

@@ -1,19 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Xi\Netvisor\Resource\Xml;
 
 class CustomerFinvoiceDetails
 {
-    private $finvoiceAddress;
-    private $finvoiceRouterCode;
+    private string $finvoiceAddress;
+    private string $finvoiceRouterCode;
 
-    /**
-     * @param string $finvoiceAddress
-     * @param string $finvoiceRouterCode
-     */
     public function __construct(
-        $finvoiceAddress,
-        $finvoiceRouterCode
+        string $finvoiceAddress,
+        string $finvoiceRouterCode
     ) {
         $this->finvoiceAddress = $finvoiceAddress;
         $this->finvoiceRouterCode = $finvoiceRouterCode;

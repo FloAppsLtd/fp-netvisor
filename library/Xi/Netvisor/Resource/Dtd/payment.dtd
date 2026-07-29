@@ -1,0 +1,19 @@
+<!DOCTYPE root [
+<!ELEMENT root (payment)>
+<!ELEMENT payment (bankpaymentmessagetype, bankpaymentmessage, recipient, sourcebankaccountnumber, destinationbankaccount, duedate, amount)>
+<!ELEMENT bankpaymentmessagetype (#PCDATA)>
+<!ELEMENT bankpaymentmessage (#PCDATA)>
+<!ELEMENT recipient (organizationcode?, name, address?, postcode?, town?)>
+<!ELEMENT organizationcode (#PCDATA)>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT address (#PCDATA)>
+<!ELEMENT postcode (#PCDATA)>
+<!ELEMENT town (#PCDATA)>
+<!ELEMENT sourcebankaccountnumber (#PCDATA)>
+<!ELEMENT destinationbankaccount (bankname, bankbranch, destinationbankaccountnumber)>
+<!ELEMENT bankname (#PCDATA)>
+<!ELEMENT bankbranch (#PCDATA)>
+<!ELEMENT destinationbankaccountnumber (#PCDATA)>
+<!ELEMENT duedate (#PCDATA)>
+<!ELEMENT amount (#PCDATA)>
+]>

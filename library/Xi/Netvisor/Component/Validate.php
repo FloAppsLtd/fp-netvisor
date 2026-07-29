@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Xi\Netvisor\Component;
+
+use Exception;
 
 class Validate
 {
     /**
      * Validates the given XML against DTD.
      *
-     * @param  string  $xml
      * @param  string  $filepath to DTD
-     * @return boolean
      */
-    public function isValid($xml, $filepath)
+    public function isValid(string $xml, string $filepath): bool
     {
         $xml = $this->insertDtd($xml, $filepath);
 
@@ -22,7 +24,7 @@ class Validate
 
         try {
             return $dom->validate();
-        } catch (\Exception) {
+        } catch (Exception) {
             return false;
         } finally {
             libxml_clear_errors();
@@ -30,12 +32,7 @@ class Validate
         }
     }
 
-    /**
-     * @param  string $xml
-     * @param  string $filepath
-     * @return string
-     */
-    private function insertDtd($xml, $filepath)
+    private function insertDtd(string $xml, string $filepath): string
     {
         $dtd = @file_get_contents($filepath);
 

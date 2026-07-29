@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Xi\Netvisor\Resource\Xml;
 
 use JMS\Serializer\Annotation\XmlList;
@@ -8,74 +10,51 @@ use Xi\Netvisor\Resource\Xml\Component\AttributeElement;
 
 class Voucher extends Root
 {
-    public const CALCULATION_MODE_WITHOUT_VAT = 'net';
-    public const CALCULATION_MODE_WITH_VAT = 'gross';
+    public const string CALCULATION_MODE_WITHOUT_VAT = 'net';
+    public const string CALCULATION_MODE_WITH_VAT = 'gross';
 
-    private $calculationMode;
-    private $voucherDate;
-    private $number;
-    private $description;
-    private $voucherClass;
+    private string $calculationMode;
+    private AttributeElement $voucherDate;
+    private ?string $number = null;
+    private ?string $description = null;
+    private string $voucherClass;
 
     #[XmlList(inline: true, entry: "voucherline")]
-    private $voucherLines = array();
+    private array $voucherLines = [];
 
-    /**
-     * @param String $voucherClass
-     * @param String $calculationMode
-     * @param \DateTime $voucherDate
-     */
-    public function __construct($voucherClass, $calculationMode, \DateTime $voucherDate)
+    public function __construct(string $voucherClass, string $calculationMode, \DateTime $voucherDate)
     {
         parent::__construct();
 
         $this->voucherClass = $voucherClass;
         $this->calculationMode = $calculationMode;
-        $this->voucherDate = new AttributeElement($voucherDate->format('Y-m-d'), array('format' => 'ansi'));
+        $this->voucherDate = new AttributeElement($voucherDate->format('Y-m-d'), ['format' => 'ansi']);
     }
 
-    /**
-     * @param VoucherLine $line
-     * @return self
-     */
-    public function addVoucherLine(VoucherLine $line)
+    public function addVoucherLine(VoucherLine $line): self
     {
         $this->voucherLines[] = $line;
         return $this;
     }
 
-    /**
-     * @param string $number
-     * @return self
-     */
-    public function setNumber($number)
+    public function setNumber(string $number): self
     {
         $this->number = $number;
         return $this;
     }
 
-    /**
-     * @param string $description
-     * @return self
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getDtdPath()
+    public function getDtdPath(): string
     {
         return $this->getDtdFile('accounting.dtd');
     }
 
-    /**
-     * @return string
-     */
-    protected function getXmlName()
+    protected function getXmlName(): string
     {
         return 'voucher';
     }

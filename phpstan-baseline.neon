@@ -1,0 +1,13 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to an undefined method GuzzleHttp\\Client\:\:expects\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: tests/Xi/Netvisor/NetvisorTest.php
+
+		-
+			message: '#^Unsafe access to private constant Xi\\Netvisor\\Resource\\Xml\\SalesInvoiceProductLineTest\:\:LONG_PRODUCT_NAmE through static\:\:\.$#'
+			identifier: staticClassAccess.privateConstant
+			count: 3
+			path: tests/Xi/Netvisor/Resource/Xml/SalesInvoiceProductLineTest.php

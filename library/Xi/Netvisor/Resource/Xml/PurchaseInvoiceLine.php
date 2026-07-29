@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Xi\Netvisor\Resource\Xml;
 
 use JMS\Serializer\Annotation\XmlList;
@@ -7,29 +9,22 @@ use Xi\Netvisor\Resource\Xml\Component\AttributeElement;
 
 class PurchaseInvoiceLine
 {
-    private $productname;
-    private $deliveredamount;
-    private $unitprice;
-    private $vatpercent;
-    private $linesum;
-    private $accountingsuggestion;
+    private string $productname;
+    private int|float|string $deliveredamount;
+    private int|float|string $unitprice;
+    private int|float|string $vatpercent;
+    private AttributeElement $linesum;
+    private ?int $accountingsuggestion = null;
 
     #[XmlList(inline: true, entry: "dimension")]
-    private $dimensions = [];
+    private array $dimensions = [];
 
-    /**
-     * @param string $productName
-     * @param float $deliveredAmount
-     * @param float $unitPrice
-     * @param int $vatPercent
-     * @param float $lineSum
-     */
     public function __construct(
-        $productName,
-        $deliveredAmount,
-        $unitPrice,
-        $vatPercent,
-        $lineSum
+        string $productName,
+        int|float|string $deliveredAmount,
+        int|float|string $unitPrice,
+        int|float|string $vatPercent,
+        int|float|string $lineSum
     ) {
         $this->productname = substr($productName, 0, 200);
         $this->deliveredamount = $deliveredAmount;
@@ -37,26 +32,17 @@ class PurchaseInvoiceLine
         $this->vatpercent = $vatPercent;
 
         $this->linesum = new AttributeElement(
-            round($lineSum, 2), array('type' => 'brutto')
+            round((float) $lineSum, 2), ['type' => 'brutto']
         );
     }
 
-    /**
-     * @param string $name
-     * @param string $item
-     * @return self
-     */
-    public function addDimension($name, $item)
+    public function addDimension(string $name, string $item): self
     {
         $this->dimensions[] = new Dimension($name, $item);
         return $this;
     }
 
-    /**
-     * @param int $account
-     * @return self
-     */
-    public function setAccountingAccount($account)
+    public function setAccountingAccount(int $account): self
     {
         $this->accountingsuggestion = $account;
         return $this;

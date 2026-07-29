@@ -1,119 +1,95 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Xi\Netvisor\Resource\Xml;
 
+use DateTime;
+use Exception;
 use JMS\Serializer\Annotation\XmlList;
 use Xi\Netvisor\Resource\Xml\Component\Root;
 use Xi\Netvisor\Resource\Xml\Component\AttributeElement;
 
 class PurchaseInvoice extends Root
 {
-    public const INVOICE_SOURCE_FINVOICE = 'finvoice';
-    public const INVOICE_SOURCE_MANUAL = 'manual';
+    public const string INVOICE_SOURCE_FINVOICE = 'finvoice';
+    public const string INVOICE_SOURCE_MANUAL = 'manual';
 
-    private $invoicenumber;
-    private $invoicedate;
-    private $invoicesource;
-    private $valuedate;
-    private $duedate;
-    private $vendorname;
-    private $vendoraddressline;
-    private $vendorpostnumber;
-    private $vendorcity;
-    private $vendorcountry;
-    private $vendorphonenumber;
-    private $vendoremail;
-    private $amount;
-    private $accountnumber;
-    private $organizationidentifier;
-    private $bankreferencenumber;
-    private $comment;
+    private int $invoicenumber;
+    private AttributeElement $invoicedate;
+    private ?string $invoicesource = null;
+    private AttributeElement $valuedate;
+    private AttributeElement $duedate;
+    private ?string $vendorname = null;
+    private ?string $vendoraddressline = null;
+    private ?string $vendorpostnumber = null;
+    private ?string $vendorcity = null;
+    private ?string $vendorcountry = null;
+    private ?string $vendorphonenumber = null;
+    private ?string $vendoremail = null;
+    private float $amount;
+    private ?string $accountnumber = null;
+    private ?string $organizationidentifier = null;
+    private ?string $bankreferencenumber = null;
+    private ?string $comment = null;
 
     #[XmlList(entry: "purchaseinvoiceline")]
-    private $purchaseinvoicelines = array();
+    private array $purchaseinvoicelines = array();
 
     #[XmlList(entry: "purchaseinvoiceattachment")]
-    private $purchaseinvoiceattachments = array();
+    private array $purchaseinvoiceattachments = array();
 
-    /**
-     * @param int $invoiceNumber
-     * @param \DateTime $invoiceDate
-     * @param \DateTime $valueDate
-     * @param \DateTime $dueDate
-     * @param float $amount
-     */
     public function __construct(
-        $invoiceNumber,
-        \DateTime $invoiceDate,
-        \DateTime $valueDate,
-        \DateTime $dueDate,
-        $amount
+        int $invoiceNumber,
+        DateTime $invoiceDate,
+        DateTime $valueDate,
+        DateTime $dueDate,
+        int|float $amount
     ) {
         parent::__construct();
 
         $this->invoicenumber = $invoiceNumber;
-        $this->amount = round($amount, 2);
+        $this->amount = round((float) $amount, 2);
 
         $this->invoicedate = new AttributeElement(
             $invoiceDate->format('Y-m-d'),
-            array('format' => 'ansi')
+            ['format' => 'ansi']
         );
 
         $this->valuedate = new AttributeElement(
             $valueDate->format('Y-m-d'),
-            array('format' => 'ansi')
+            ['format' => 'ansi']
         );
 
         $this->duedate = new AttributeElement(
             $dueDate->format('Y-m-d'),
-            array('format' => 'ansi')
+            ['format' => 'ansi']
         );
     }
 
-    /**
-     * @param PurchaseInvoiceLine $line
-     * @return self
-     */
-    public function addPurchaseInvoiceLine(PurchaseInvoiceLine $line)
+    public function addPurchaseInvoiceLine(PurchaseInvoiceLine $line): self
     {
         $this->purchaseinvoicelines[] = $line;
         return $this;
     }
 
-    /**
-     * @param PurchaseInvoiceAttachment $attachment
-     * @return self
-     */
-    public function addAttachment(PurchaseInvoiceAttachment $attachment)
+    public function addAttachment(PurchaseInvoiceAttachment $attachment): self
     {
         $this->purchaseinvoiceattachments[] = $attachment;
         return $this;
     }
 
-    /**
-     * @param string $bankAccount
-     * @param string $businessId
-     * @param string $name
-     * @param string $streetAddress
-     * @param string $postNumber
-     * @param string $city
-     * @param string $countryCode
-     * @param string $phone
-     * @param string $email
-     *
-     * @return self
-     */
     public function setVendorDetails(
-        $bankAccount = null,
-        $businessId = null,
-        $name = null,
-        $streetAddress = null,
-        $postNumber = null,
-        $city = null,
-        $countryCode = null,
-        $phone = null,
-        $email = null
-    ) {
+        ?string $bankAccount = null,
+        ?string $businessId = null,
+        ?string $name = null,
+        ?string $streetAddress = null,
+        ?string $postNumber = null,
+        ?string $city = null,
+        ?string $countryCode = null,
+        ?string $phone = null,
+        ?string $email = null
+    ): self {
         $this->accountnumber = $bankAccount ?: null;
         $this->organizationidentifier = $businessId ?: null;
         $this->vendorname = $name ? substr($name, 0, 250) : null;
@@ -127,31 +103,22 @@ class PurchaseInvoice extends Root
         return $this;
     }
 
-    /**
-     * @param string $reference
-     * @return self
-     */
-    public function setBankReferenceNumber($reference)
+    public function setBankReferenceNumber(string $reference): self
     {
         $this->bankreferencenumber = $reference;
         return $this;
     }
 
-    /**
-     * @param string $comment
-     * @return self
-     */
-    public function setComment($comment)
+    public function setComment(string $comment): self
     {
         $this->comment = substr($comment, 0, 255);
         return $this;
     }
 
     /**
-     * @param string $source
-     * @return self
+     * @throws Exception
      */
-    public function setInvoiceSource($source)
+    public function setInvoiceSource(string $source): self
     {
         $allowed = [
             static::INVOICE_SOURCE_FINVOICE,
@@ -159,19 +126,19 @@ class PurchaseInvoice extends Root
         ];
 
         if (!in_array($source, $allowed)) {
-            throw new \Exception('Invalid invoice source: ' . $source);
+            throw new Exception('Invalid invoice source: ' . $source);
         }
 
         $this->invoicesource = $source;
         return $this;
     }
 
-    public function getDtdPath()
+    public function getDtdPath(): string
     {
         return $this->getDtdFile('purchaseinvoice.dtd');
     }
 
-    protected function getXmlName()
+    protected function getXmlName(): string
     {
         return 'purchaseinvoice';
     }
