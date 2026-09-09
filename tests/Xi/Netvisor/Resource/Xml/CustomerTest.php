@@ -5,6 +5,8 @@ namespace Xi\Netvisor\Resource\Xml;
 use Xi\Netvisor\Resource\Xml\Customer;
 use Xi\Netvisor\Resource\Xml\CustomerBaseInformation;
 use Xi\Netvisor\XmlTestCase;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class CustomerTest extends XmlTestCase
 {
@@ -33,17 +35,13 @@ class CustomerTest extends XmlTestCase
         $this->customer = new Customer($this->baseInformation, null);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function hasDtd()
     {
         $this->assertNotNull($this->customer->getDtdPath());
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function xmlHasRequiredValues()
     {
         $xml = $this->toXml($this->customer->getSerializableObject());
@@ -68,9 +66,7 @@ class CustomerTest extends XmlTestCase
         $this->assertXmlContainsTagWithValue('email', $email, $xml);
     }
 
-    /**
-     * @dataProvider businessIdProvider
-     */
+    #[DataProvider('businessIdProvider')]
     public function testSetBusinessId($id)
     {
         if (!is_null($id)) {
@@ -89,7 +85,7 @@ class CustomerTest extends XmlTestCase
         $this->assertXmlContainsTagWithValue('isprivatecustomer', 0, $xml);
     }
 
-    public function businessIdProvider()
+    public static function businessIdProvider()
     {
         return [
             ['9-876543'],

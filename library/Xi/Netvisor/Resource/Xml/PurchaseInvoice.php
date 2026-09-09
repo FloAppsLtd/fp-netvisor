@@ -29,14 +29,10 @@ class PurchaseInvoice extends Root
     private $bankreferencenumber;
     private $comment;
 
-    /**
-     * @XmlList(entry = "purchaseinvoiceline")
-     */
+    #[XmlList(entry: "purchaseinvoiceline")]
     private $purchaseinvoicelines = array();
 
-    /**
-     * @XmlList(entry = "purchaseinvoiceattachment")
-     */
+    #[XmlList(entry: "purchaseinvoiceattachment")]
     private $purchaseinvoiceattachments = array();
 
     /**

@@ -18,10 +18,15 @@ class Validate
         $dom = new \DOMDocument();
         $dom->loadXML($xml);
 
+        $previousUseInternalErrors = libxml_use_internal_errors(true);
+
         try {
             return $dom->validate();
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return false;
+        } finally {
+            libxml_clear_errors();
+            libxml_use_internal_errors($previousUseInternalErrors);
         }
     }
 

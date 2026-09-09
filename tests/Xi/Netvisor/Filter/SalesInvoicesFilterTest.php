@@ -4,12 +4,11 @@ namespace Xi\Netvisor\Filter;
 
 use Xi\Netvisor\Filter\SalesInvoicesFilter;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class SalesInvoicesFilterTest extends TestCase
 {
-    /**
-     * @dataProvider provider
-     */
+    #[DataProvider('provider')]
     public function testReturnsFilterArray(bool $setId, bool $setInvoiceAboveId, int $count)
     {
         $datetime = new \DateTime('2020-02-02');
@@ -29,27 +28,27 @@ class SalesInvoicesFilterTest extends TestCase
         $this->assertCount($count, $filters);
     }
 
-    public function provider()
+    public static function provider()
     {
         return [
             [
                 'setId' => true,
-                'setInvoicesAboveId' => true,
+                'setInvoiceAboveId' => true,
                 'count' => 2,
             ],
             [
                 'setId' => false,
-                'setInvoicesAboveId' => true,
+                'setInvoiceAboveId' => true,
                 'count' => 1,
             ],
             [
                 'setId' => true,
-                'setInvoicesAboveId' => false,
+                'setInvoiceAboveId' => false,
                 'count' => 1,
             ],
             [
                 'setId' => false,
-                'setInvoicesAboveId' => false,
+                'setInvoiceAboveId' => false,
                 'count' => 0,
             ],
         ];

@@ -14,7 +14,7 @@ class Customer extends Root
 
     public function __construct(
         CustomerBaseInformation $customerBaseInformation,
-        CustomerFinvoiceDetails $customerFinvoiceDetails = null
+        ?CustomerFinvoiceDetails $customerFinvoiceDetails = null
     ) {
         parent::__construct();
         

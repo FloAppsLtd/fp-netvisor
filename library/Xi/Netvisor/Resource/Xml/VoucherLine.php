@@ -17,9 +17,7 @@ class VoucherLine
     private $accountNumber;
     private $vatPercent;
 
-    /**
-     * @XmlList(inline = true, entry = "dimension")
-     */
+    #[XmlList(inline: true, entry: "dimension")]
     private $dimensions = [];
 
     public function __construct($lineSum, $accountNumber, $vatPercent)

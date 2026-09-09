@@ -45,14 +45,14 @@ class XmlTestCase extends TestCase
      */
     public function assertXmlContainsTagWithValue($tag, $value, $xml)
     {
-        $this->assertContains(sprintf('<%s', $tag), $xml);
+        $this->assertStringContainsString(sprintf('<%s', $tag), $xml);
 
         if (is_int($value) || is_float($value)) {
-            $this->assertContains(sprintf('>%s</%s>', $value, $tag), $xml);
+            $this->assertStringContainsString(sprintf('>%s</%s>', $value, $tag), $xml);
             return;
         }
 
-        $this->assertContains(sprintf('><![CDATA[%s]]></%s>', $value, $tag), $xml);
+        $this->assertStringContainsString(sprintf('><![CDATA[%s]]></%s>', $value, $tag), $xml);
     }
 
     /**
@@ -61,7 +61,7 @@ class XmlTestCase extends TestCase
      */
     public function assertXmlDoesNotContainTag($tag, $xml)
     {
-        $this->assertNotContains(sprintf('<%s', $tag), $xml);
+        $this->assertStringNotContainsString(sprintf('<%s', $tag), $xml);
     }
 
     /**
@@ -77,7 +77,7 @@ class XmlTestCase extends TestCase
             $attributeLine .= sprintf(' %s="%s"', $key, $value);
         }
 
-        $this->assertContains(sprintf('<%s%s>', $tag, $attributeLine), $xml);
+        $this->assertStringContainsString(sprintf('<%s%s>', $tag, $attributeLine), $xml);
     }
 
     public function assertXmlIsValid($xml, $dtdPath)
